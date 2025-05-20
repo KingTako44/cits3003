@@ -19,7 +19,7 @@ namespace EditorScene {
         std::shared_ptr<DirectionalLight> light;
         std::shared_ptr<EntityRenderer::Entity> light_cone;
 
-        DirectionalLightElement(const ElementRef& parent, std::string name, glm::vec3 direction, std::shared_ptr<DirectionalLight> light, std::shared_ptr<EntityRenderer::Entity> cone) :
+        DirectionalLightElement(const ElementRef& parent, std::string name, glm::vec3 direction, std::shared_ptr<DirectionalLight> light, std::shared_ptr<EntityRenderer::Entity> light_cone) :
             SceneElement(parent, std::move(name)), direction(direction), light(std::move(light)), light_cone(std::move(light_cone)) {}
 
         static std::unique_ptr<DirectionalLightElement> new_default(const SceneContext& scene_context, ElementRef parent);
