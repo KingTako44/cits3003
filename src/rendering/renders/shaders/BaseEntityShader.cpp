@@ -6,8 +6,7 @@ BaseEntityShader::BaseEntityShader(std::string name, const std::string& vertex_p
                                    std::unordered_map<std::string, std::string> vert_defines,
                                    std::unordered_map<std::string, std::string> frag_defines) :
     ShaderInterface(std::move(name), vertex_path, fragment_path, [&]() { get_uniforms_set_bindings(); }, std::move(vert_defines), std::move(frag_defines)) {
-
-    get_uniforms_set_bindings();
+    BaseEntityShader::get_uniforms_set_bindings();
 }
 
 void BaseEntityShader::get_uniforms_set_bindings() {

@@ -54,6 +54,7 @@ protected:
     int specular_tint_location{};
     int ambient_tint_location{};
     int shininess_location{};
+    int texture_scale_location{};
 
     static const uint POINT_LIGHT_BINDING = 0;
 

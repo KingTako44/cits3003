@@ -13,7 +13,7 @@ uniform float inverse_gamma;
 
 uniform sampler2D diffuse_texture;
 uniform sampler2D specular_map_texture;
-uniform float texture_scale = 1.0f;
+uniform float texture_scale;
 
 void main() {
     // Resolve the per vertex lighting with per fragment texture sampling.
