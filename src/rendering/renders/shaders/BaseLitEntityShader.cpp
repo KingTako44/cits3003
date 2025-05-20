@@ -39,7 +39,7 @@ void BaseLitEntityShader::set_instance_data(const BaseLitEntityInstanceData& ins
     glProgramUniform3fv(id(), specular_tint_location, 1, &scaled_specular_tint[0]);
     glProgramUniform3fv(id(), ambient_tint_location, 1, &scaled_ambient_tint[0]);
     glProgramUniform1fv(id(), shininess_location, 1, &entity_material.shininess);
-    glProgramUniform1fv(id(), texture_scale_location, 1, &entity_material.texture_scale);
+    //glProgramUniform1fv(id(), texture_scale_location, 1, &entity_material.texture_scale);
 }
 
 void BaseLitEntityShader::set_point_lights(const std::vector<PointLight>& point_lights) {

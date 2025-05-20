@@ -10,13 +10,16 @@ layout(location = 0) out vec4 out_colour;
 // Material properties
 uniform vec3 emissive_tint;
 
+
 // Global Data
 uniform float inverse_gamma;
 
 uniform sampler2D emissive_texture;
+uniform float texture_scale = 1.0f;
 
 void main() {
-    vec3 texture_colour = texture(emissive_texture, frag_in.texture_coordinate).rgb;
+    vec2 scaled_coords = frag_in.texture_coordinate * texture_scale;
+    vec3 texture_colour = texture(emissive_texture, scaled_coords).rgb;
     vec3 emissive_colour = emissive_tint * texture_colour;
 
     out_colour = vec4(emissive_colour, 1.0f);

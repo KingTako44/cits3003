@@ -131,7 +131,7 @@ void EditorScene::LitMaterialComponent::add_material_imgui_edit_section(MasterRe
     material_changed |= ImGui::DragFloat("Ambient Factor", &material.ambient_tint.a, 0.01f);
 
     material_changed |= ImGui::DragFloat("Shininess", &material.shininess, 1.0f);
-    material_changed |= ImGui::DragFloat("Texture Scale", &material.texture_scale, 1.0f);
+    material_changed |= ImGui::DragFloat("Texture Scale", &material.texture_scale, 0.01f, 0.01f, 100.0f);
 
     ImGui::Spacing();
     if (material_changed) {
@@ -170,6 +170,7 @@ void EditorScene::EmissiveMaterialComponent::add_emissive_material_imgui_edit_se
 
     material_changed |= ImGui::ColorEdit3("Emissive Tint", &material.emission_tint[0]);
     material_changed |= ImGui::DragFloat("Emissive Factor", &material.emission_tint.a, 0.01f);
+    material_changed |= ImGui::DragFloat("Texture Scale", &material.texture_scale, 0.01f, 0.01f, 100.0f);
 
     ImGui::Spacing();
     if (material_changed) {
@@ -180,11 +181,17 @@ void EditorScene::EmissiveMaterialComponent::add_emissive_material_imgui_edit_se
 void EditorScene::EmissiveMaterialComponent::update_emissive_material_from_json(const json& json) {
     auto m = json["material"];
     material.emission_tint = m["emission_tint"];
+    if (m.contains("texture_scale")) {
+        material.texture_scale = m["texture_scale"];
+    } else {
+        material.texture_scale = 1.0f;
+    }
 }
 
 json EditorScene::EmissiveMaterialComponent::emissive_material_into_json() const {
     return {"material", {
         {"emission_tint", material.emission_tint},
+        {"texture_scale", material.texture_scale},
     }};
 }
 
