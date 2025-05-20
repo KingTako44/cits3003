@@ -66,7 +66,7 @@ std::vector<Light> LightScene::get_all_lights(const std::unordered_set<std::shar
 
     auto it = lights.begin();
     for (size_t i = 0; i < result_count; ++i) {
-        result.push_back(*it);
+        result.push_back(**it);
         ++it;
     }
 
