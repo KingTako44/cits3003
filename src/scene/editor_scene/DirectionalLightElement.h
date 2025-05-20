@@ -1,0 +1,8 @@
+//
+// Created by henry on 20/05/2025.
+//
+
+#ifndef DIRECTIONALLIGHTELEMENT_H
+#define DIRECTIONALLIGHTELEMENT_H
+
+#endif //DIRECTIONALLIGHTELEMENT_H
