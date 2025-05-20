@@ -45,7 +45,6 @@ void main() {
     #if NUM_PL > 0
         ,point_lights
     #endif
-    );
     #if NUM_DL > 0
         ,directional_lights
     #endif

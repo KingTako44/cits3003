@@ -45,6 +45,9 @@ void main() {
         #if NUM_PL > 0
         ,point_lights
         #endif
+        #if NUM_DL > 0
+        ,directional_lights
+        #endif
     );
 
     vec3 resolved_lighting = resolve_textured_light_calculation(lighting_result, diffuse_texture, specular_map_texture, frag_in.texture_coordinate, texture_scale);
