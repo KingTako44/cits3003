@@ -41,6 +41,10 @@ std::unique_ptr<EditorScene::EmissiveEntityElement> EditorScene::EmissiveEntityE
     new_entity->rendered_entity->model = scene_context.model_loader.load_from_file<EmissiveEntityRenderer::VertexData>(j["model"]);
     new_entity->rendered_entity->render_data.emission_texture = texture_from_json(scene_context, j["emission_texture"]);
 
+    if (j.contains("wireframe_enabled")) {
+        new_entity->rendered_entity->wireframe_enabled = j["wireframe_enabled"];
+    }
+
     new_entity->update_instance_data();
     return new_entity;
 }
@@ -57,6 +61,7 @@ json EditorScene::EmissiveEntityElement::into_json() const {
         emissive_material_into_json(),
         {"model", rendered_entity->model->get_filename().value()},
         {"emission_texture", texture_to_json(rendered_entity->render_data.emission_texture)},
+        {"wireframe_enabled", rendered_entity->wireframe_enabled},
     };
 }
 
@@ -71,6 +76,13 @@ void EditorScene::EmissiveEntityElement::add_imgui_edit_section(MasterRenderScen
     ImGui::Text("Model & Textures");
     scene_context.model_loader.add_imgui_model_selector("Model Selection", rendered_entity->model);
     scene_context.texture_loader.add_imgui_texture_selector("Emission Texture", rendered_entity->render_data.emission_texture);
+    ImGui::Spacing();
+
+    ImGui::Text("Wireframe Mode");
+    bool wireframe = rendered_entity->wireframe_enabled;
+    if (ImGui::Checkbox("Wireframe Mode", &wireframe)) {
+        rendered_entity->wireframe_enabled = wireframe;
+    }
     ImGui::Spacing();
 }
 

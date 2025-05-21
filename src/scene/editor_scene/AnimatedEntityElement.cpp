@@ -51,6 +51,10 @@ std::unique_ptr<EditorScene::AnimatedEntityElement> EditorScene::AnimatedEntityE
     new_entity->rendered_entity->animation_id = animation_parameters["animation_id"];
     new_entity->rendered_entity->animation_time_seconds = animation_parameters["animation_time_seconds"];
 
+    if (j.contains("wireframe_enabled")) {
+        new_entity->rendered_entity->wireframe_enabled = j["wireframe_enabled"];
+    }
+
     new_entity->update_instance_data();
     return new_entity;
 }
@@ -68,6 +72,7 @@ json EditorScene::AnimatedEntityElement::into_json() const {
         {"model", rendered_entity->mesh_hierarchy->filename.value()},
         {"diffuse_texture", texture_to_json(rendered_entity->render_data.diffuse_texture)},
         {"specular_map_texture", texture_to_json(rendered_entity->render_data.specular_map_texture)},
+        {"wireframe_enabled", rendered_entity->wireframe_enabled},
         {"animation_parameters", {
             {"animation_id", animation_parameters.animation_id},
             {"speed", animation_parameters.speed},
@@ -92,6 +97,13 @@ void EditorScene::AnimatedEntityElement::add_imgui_edit_section(MasterRenderScen
     }
     scene_context.texture_loader.add_imgui_texture_selector("Diffuse Texture", rendered_entity->render_data.diffuse_texture);
     scene_context.texture_loader.add_imgui_texture_selector("Specular Map", rendered_entity->render_data.specular_map_texture, false);
+    ImGui::Spacing();
+
+    ImGui::Text("Wireframe Mode");
+    bool wireframe = rendered_entity->wireframe_enabled;
+    if (ImGui::Checkbox("Wireframe Mode", &wireframe)) {
+        rendered_entity->wireframe_enabled = wireframe;
+    }
     ImGui::Spacing();
 }
 

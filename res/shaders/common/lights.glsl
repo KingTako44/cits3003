@@ -39,7 +39,7 @@ const float ambient_factor = 0.002f;
 void point_light_calculation(PointLightData point_light, LightCalculatioData calculation_data, float shininess, inout vec3 total_diffuse, inout vec3 total_specular, inout vec3 total_ambient) {
     vec3 ws_light_offset = point_light.position - calculation_data.ws_frag_position;
     float distance = length(ws_light_offset);
-    float attenuation = 1/(distance * 0.05 + distance * distance * 0.1);
+    float attenuation = 1/(0.7 + distance * 0.05 + distance * distance * 0.1);
 
     // Ambient
     vec3 ambient_component = ambient_factor * attenuation * point_light.colour;
