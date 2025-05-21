@@ -18,19 +18,15 @@ std::unique_ptr<EditorScene::DirectionalLightElement> EditorScene::DirectionalLi
             default_direction, // Set via update_instance_data()
             glm::vec4{1.0f, 1.0f, 1.0f, 1.0f}
         ),
-        EntityRenderer::Entity::create(
-            scene_context.model_loader.load_from_file<EntityRenderer::VertexData>("cone.obj"),
-            EntityRenderer::InstanceData{
+        EmissiveEntityRenderer::Entity::create(
+            scene_context.model_loader.load_from_file<EmissiveEntityRenderer::VertexData>("cone.obj"),
+            EmissiveEntityRenderer::InstanceData{
                 glm::mat4{}, // Set via update_instance_data()
-                EntityRenderer::EntityMaterial{
-                    glm::vec4{1.0f, 1.0f, 0.0f, 1.0f},
-                    glm::vec4{1.0f, 1.0f, 0.0f, 0.5f},
-                    glm::vec4{1.0f, 1.0f, 0.0f, 0.2f},
-                    32.0f
+                EmissiveEntityRenderer::EmissiveEntityMaterial{
+                    glm::vec4{1.0f}
                 }
             },
-            EntityRenderer::RenderData{
-                scene_context.texture_loader.default_white_texture(),
+            EmissiveEntityRenderer::RenderData{
                 scene_context.texture_loader.default_white_texture()
             }
         )
@@ -120,8 +116,8 @@ void EditorScene::DirectionalLightElement::update_instance_data() {
         rotation_axis = glm::normalize(rotation_axis);
         glm::mat4 rotation_matrix = glm::rotate(rotation_angle, rotation_axis);
         glm::mat4 model_matrix = glm::scale(glm::vec3(0.2f, 0.2f, visual_length));
-        model_matrix = rotation_matrix * model_matrix;
-
+        glm::mat4 translation_matrix = glm::translate(glm::vec3(0.0f, 10.0f, 0.0f));
+        model_matrix = rotation_matrix * translation_matrix * model_matrix;
         if (!EditorScene::is_null(parent)) {
             model_matrix = (*parent)->transform * model_matrix;
         }

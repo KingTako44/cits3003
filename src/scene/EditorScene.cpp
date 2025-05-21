@@ -90,27 +90,26 @@ void EditorScene::EditorScene::open(const SceneContext& scene_context) {
     default_light->add_to_render_scene(render_scene);
     scene_root->push_back(std::move(default_light));
 
+    glm::vec3 default_dir_light_pos = glm::vec3(0.0f, 10.0f, 0.0f);
+    glm::vec3 default_dir_light_direction = glm::normalize(glm::vec3(0.5f, -1.0f, 0.5f));
+
     auto default_dir_light = std::make_unique<DirectionalLightElement>(
         NullElementRef,
         "Default Directional Light",
-        default_light_pos,
+        default_dir_light_direction,
         DirectionalLight::create(
             glm::vec3{}, // Set via update_instance_data()
             glm::vec4{0.8f, 0.8f, 1.0f, 0.5f}
         ),
-        EntityRenderer::Entity::create(
-            scene_context.model_loader.load_from_file<EntityRenderer::VertexData>("cone.obj"),
-            EntityRenderer::InstanceData{
+        EmissiveEntityRenderer::Entity::create(
+            scene_context.model_loader.load_from_file<EmissiveEntityRenderer::VertexData>("cone.obj"),
+            EmissiveEntityRenderer::InstanceData{
                 glm::mat4{}, // Set via update_instance_data()
-                EntityRenderer::EntityMaterial{
-                    glm::vec4{0.8f, 0.8f, 1.0f, 1.5f},
-                    glm::vec4{0.8f, 0.8f, 1.0f, 0.5f},
-                    glm::vec4{0.8f, 0.8f, 1.0f, 0.2f},
-                    32.0f
+                EmissiveEntityRenderer::EmissiveEntityMaterial{
+                    glm::vec4{1.0f}
                 }
             },
-            EntityRenderer::RenderData{
-                scene_context.texture_loader.default_white_texture(),
+            EmissiveEntityRenderer::RenderData{
                 scene_context.texture_loader.default_white_texture()
             }
         )
