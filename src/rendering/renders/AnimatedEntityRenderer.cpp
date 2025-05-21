@@ -28,6 +28,15 @@ void AnimatedEntityRenderer::AnimatedEntityRenderer::render(const RenderScene& r
     shader.set_directional_lights(light_scene.get_directional_lights(BaseLitEntityShader::MAX_DL, 1));
 
     for (const auto& entity: render_scene.entities) {
+        bool was_wireframe = false;
+        if (entity->wireframe_enabled) {
+            GLint polygonMode[2];
+            glGetIntegerv(GL_POLYGON_MODE, polygonMode);
+            was_wireframe = (polygonMode[0] == GL_LINE);
+
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
+
         shader.set_instance_data(entity->instance_data);
 
         glm::vec3 position = entity->instance_data.model_matrix[3];
@@ -56,6 +65,9 @@ void AnimatedEntityRenderer::AnimatedEntityRenderer::render(const RenderScene& r
                 glDrawElementsBaseVertex(GL_TRIANGLES, mesh.model->get_index_count(), GL_UNSIGNED_INT, nullptr, mesh.model->get_vertex_offset());
             }
         });
+        if (entity->wireframe_enabled && !was_wireframe) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
     }
 }
 

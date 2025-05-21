@@ -12,6 +12,7 @@ struct RenderedEntity {
     std::shared_ptr<ModelHandle<VertexData>> model;
     InstanceData instance_data;
     RenderData render_data;
+    bool wireframe_enabled = false;
 
     RenderedEntity(const std::shared_ptr<ModelHandle<VertexData>>& model, InstanceData instance_data, RenderData render_data);
 
@@ -42,6 +43,7 @@ struct AnimatedRenderedEntity : public AnimatedEntityInterface {
     std::shared_ptr<MeshHierarchy<VertexData>> mesh_hierarchy;
     InstanceData instance_data;
     RenderData render_data;
+    bool wireframe_enabled = false;
 
     // Animation Data
     uint animation_id = NONE_ANIMATION; // NONE_ANIMATION means disabled

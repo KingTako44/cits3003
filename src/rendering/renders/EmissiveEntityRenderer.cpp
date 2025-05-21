@@ -31,6 +31,15 @@ void EmissiveEntityRenderer::EmissiveEntityRenderer::render(const RenderScene& r
     shader.set_global_data(render_scene.global_data);
 
     for (const auto& entity: render_scene.entities) {
+        bool was_wireframe = false;
+        if (entity->wireframe_enabled) {
+            GLint polygonMode[2];
+            glGetIntegerv(GL_POLYGON_MODE, polygonMode);
+            was_wireframe = (polygonMode[0] == GL_LINE);
+
+            glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        }
+
         shader.set_instance_data(entity->instance_data);
 
         glActiveTexture(GL_TEXTURE0);
@@ -38,6 +47,10 @@ void EmissiveEntityRenderer::EmissiveEntityRenderer::render(const RenderScene& r
 
         glBindVertexArray(entity->model->get_vao());
         glDrawElementsBaseVertex(GL_TRIANGLES, entity->model->get_index_count(), GL_UNSIGNED_INT, nullptr, entity->model->get_vertex_offset());
+
+        if (entity->wireframe_enabled && !was_wireframe) {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        }
     }
 }
 
