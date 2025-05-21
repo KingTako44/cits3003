@@ -32,6 +32,8 @@ void EntityRenderer::EntityRenderer::render(const RenderScene& render_scene, con
     shader.use();
     shader.set_global_data(render_scene.global_data);
 
+    shader.set_directional_lights(light_scene.get_directional_lights(BaseLitEntityShader::MAX_DL, 1));
+
     for (const auto& entity: render_scene.entities) {
         shader.set_instance_data(entity->instance_data);
 

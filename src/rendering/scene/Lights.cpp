@@ -6,6 +6,10 @@ std::vector<PointLight> LightScene::get_nearest_point_lights(glm::vec3 target, s
     return get_nearest_lights(point_lights, target, max_count, min_count);
 }
 
+std::vector<DirectionalLight> LightScene::get_directional_lights(size_t max_count, size_t min_count) const {
+    return get_all_lights(directional_lights, max_count, min_count);
+}
+
 template<typename Light>
 std::vector<Light> LightScene::get_nearest_lights(const std::unordered_set<std::shared_ptr<Light>>& lights, glm::vec3 target, size_t max_count, size_t min_count) {
     if (lights.size() <= max_count) {
@@ -50,3 +54,27 @@ std::vector<Light> LightScene::get_nearest_lights(const std::unordered_set<std::
     }
     return result;
 }
+
+template<typename Light>
+std::vector<Light> LightScene::get_all_lights(const std::unordered_set<std::shared_ptr<Light>> & lights, size_t max_count, size_t min_count) {
+    size_t result_count = std::min(lights.size(), max_count);
+
+        // No need to store if we are just going to return them all anyway.
+
+    std::vector<Light> result{};
+    result.reserve(std::max(result_count, min_count));
+
+    auto it = lights.begin();
+    for (size_t i = 0; i < result_count; ++i) {
+        result.push_back(**it);
+        ++it;
+    }
+
+    while (result.size() < min_count) {
+        result.push_back(Light::off());
+    }
+
+    return result;
+}
+
+

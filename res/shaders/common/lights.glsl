@@ -2,6 +2,10 @@
 #define NUM_PL 0
 #endif
 
+#ifndef NUM_DL
+#define NUM_DL 0
+#endif
+
 // Material Properties
 struct Material {
     vec3 diffuse_tint;
@@ -19,6 +23,11 @@ struct LightCalculatioData {
 
 struct PointLightData {
     vec3 position;
+    vec3 colour;
+};
+
+struct DirectionalLightData {
+    vec3 direction;
     vec3 colour;
 };
 
@@ -50,6 +59,25 @@ void point_light_calculation(PointLightData point_light, LightCalculatioData cal
     total_ambient += ambient_component;
 }
 
+void directional_light_calculation(DirectionalLightData directional_light, LightCalculatioData calculation_data, float shininess, inout vec3 total_diffuse, inout vec3 total_specular, inout vec3 total_ambient) {
+    // Ambient
+    vec3 ambient_component = ambient_factor * directional_light.colour;
+
+    // Diffuse
+    vec3 ws_light_dir = -normalize(directional_light.direction);
+    float diffuse_factor = max(dot(ws_light_dir, calculation_data.ws_normal), 0.0f);
+    vec3 diffuse_component = diffuse_factor * directional_light.colour;
+
+    // Specular
+    vec3 ws_halfway_dir = normalize(ws_light_dir + calculation_data.ws_view_dir);
+    float specular_factor = pow(max(dot(calculation_data.ws_normal, ws_halfway_dir), 0.0f), shininess);
+    vec3 specular_component = specular_factor * directional_light.colour;
+
+    total_diffuse += diffuse_component;
+    total_specular += specular_component;
+    total_ambient += ambient_component;
+}
+
 // Total Calculation
 
 struct LightingResult {
@@ -61,6 +89,9 @@ struct LightingResult {
 LightingResult total_light_calculation(LightCalculatioData light_calculation_data, Material material
         #if NUM_PL > 0
         ,PointLightData point_lights[NUM_PL]
+        #endif
+        #if NUM_DL > 0
+        ,DirectionalLightData directional_lights[NUM_DL]
         #endif
     ) {
 
@@ -74,9 +105,24 @@ LightingResult total_light_calculation(LightCalculatioData light_calculation_dat
     }
     #endif
 
-    #if NUM_PL > 0
-    total_ambient /= float(NUM_PL);
+    #if NUM_DL > 0
+    for (int i = 0; i < NUM_DL; i++){
+        directional_light_calculation(directional_lights[i], light_calculation_data, material.shininess, total_diffuse, total_specular, total_ambient);
+    }
     #endif
+
+    int total_lights = 0;
+    #if NUM_PL > 0
+    total_lights += NUM_PL;
+    #endif
+    #if NUM_DL > 0
+    total_lights += NUM_DL;
+    #endif
+
+    if (total_lights > 0) {
+        total_ambient /= float(total_lights);
+    }
+
 
     total_diffuse *= material.diffuse_tint;
     total_specular *= material.specular_tint;

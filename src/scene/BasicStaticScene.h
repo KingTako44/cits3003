@@ -14,8 +14,8 @@ class BasicStaticScene : public SceneInterface {
     const float init_distance = 5.0f;
     const glm::vec3 init_focus_point = {2.5f, 0.0f, 1.5f};
     const glm::vec3 init_position = {0.0f, 2.5f * sqrtf(2.0f), 4.0f};
-    const float init_pitch = glm::radians(-45.0f);
-    const float init_yaw = glm::radians(-45.0f);
+    const float init_pitch = glm::radians(45.0f);
+    const float init_yaw = glm::radians(45.0f);
     const float init_near = 0.01f;
     const float init_fov = glm::radians(90.0f);
 
